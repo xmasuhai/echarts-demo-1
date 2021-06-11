@@ -1,42 +1,56 @@
-import * as echarts from 'echarts/core';
+import * as echarts from 'echarts/core'
 import {
   GridComponent
-} from 'echarts/components';
+} from 'echarts/components'
 import {
   LineChart
-} from 'echarts/charts';
+} from 'echarts/charts'
 import {
   CanvasRenderer
-} from 'echarts/renderers';
+} from 'echarts/renderers'
 
 echarts.use(
   [GridComponent, LineChart, CanvasRenderer]
-);
+)
+import chartData from '../storage/chartData'
+
+// 初始化加载DOM
+const chartDom = document.getElementById('lineChart')
+if (!chartDom) {return}
+export const myChart = echarts.init(chartDom, 'light')
+
 export default function () {
-  // 初始化加载DOM
-  const chartDom = document.getElementById('lineChart')
-  const myChart = echarts.init(chartDom, 'light')
-// 配置选项
-  const option = {
+// 使用配置项和数据显示图表
+  myChart.setOption({
     title: {
-      text: 'ECharts 线形图示例'
+      show: true,
+      text: '销售数据',
+      left: 20
     },
     legend: {
-      data: ['bug数']
+      data: ['金额']
+    },
+    tooltip: {
+      show: true
     },
     xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      axisLine: {},
+      data: chartData.dateList
     },
     yAxis: {
       type: 'value'
     },
     series: [{
-      name: 'bug数',
-      data: [150, 230, 224, 218, 135, 147, 260],
-      type: 'line'
+      name: '金额',
+      data: chartData.valueList,
+      type: 'line',
+      lineStyle: {
+        color: '#0074d9'
+      },
+      itemStyle: {
+        borderWidth: 20,
+        color: '#ff4136'
+      }
     }]
-  }
-// 使用配置项和数据显示图表
-  option && myChart.setOption(option)
+  })
 }

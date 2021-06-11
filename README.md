@@ -1,4 +1,5 @@
 # echarts-demo-1
+
 ## 统计图表
 
 ### 【数据可视化】Echarts 使用指南
@@ -65,8 +66,8 @@ yarn add --dev @types/echarts
 
 - 安装`yarn add --dev @types/echarts`是为了在`WebStorm`中输入代码会有提示
 - 遇坑，保证安装包在项目目录下安装到`node_modules`，而不是安装在`~/`根目录
-    - 去掉设置中>终端>“将'node_modules/.bin'从项目根添加到%PATH%” 前面的勾选
-    - 重新初始化一遍项目
+  - 去掉设置中>终端>“将'node_modules/.bin'从项目根添加到%PATH%” 前面的勾选
+  - 重新初始化一遍项目
 
 > `index.html`中引入入口文件`main.js`
 
@@ -180,13 +181,7 @@ parcel src/index.html
 - 使用`showLoading()/hideLoading()`
 - [更复杂的示例](https://echarts.apache.org/examples/zh/editor.html?c=doc-example/tutorial-dynamic-data)
 
-
-
-
-
 #### echarts 展示 loading
-
-
 
 #### `echart` 点击事件
 
