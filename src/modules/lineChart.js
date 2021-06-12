@@ -12,10 +12,12 @@ import {
 echarts.use(
   [GridComponent, LineChart, CanvasRenderer]
 )
+
 import chartData from '../storage/chartData'
 
 // 初始化加载DOM
 const chartDom = document.getElementById('lineChart')
+
 if (!chartDom) {return}
 export const myChart = echarts.init(chartDom, 'light')
 
@@ -34,7 +36,11 @@ export default function () {
       show: true
     },
     xAxis: {
-      axisLine: {},
+      axisLine: {
+        lineStyle: {
+          color: '#0074d9'
+        }
+      },
       data: chartData.dateList
     },
     yAxis: {
@@ -45,7 +51,7 @@ export default function () {
       data: chartData.valueList,
       type: 'line',
       lineStyle: {
-        color: '#0074d9'
+        color: '#28a745'
       },
       itemStyle: {
         borderWidth: 20,
