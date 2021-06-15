@@ -1,7 +1,6 @@
-export default function (myChart) {
-  console.log("myChart: ", myChart)
-  myChart.addEventListener('click', (e) => {
-    console.log(myChart)
+export default function (chartDom, myChart) {
+  myChart.on('click', (e) => {
+    console.log("e: ", e)
     console.log("e.name: ", e.name)
     console.log("e.dataIndex: ",e.dataIndex)
     console.log("e.data: ", e.data)

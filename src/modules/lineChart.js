@@ -16,7 +16,7 @@ echarts.use(
 import chartData from '../storage/chartData'
 
 // 初始化加载DOM
-const chartDom = document.getElementById('lineChart')
+export const chartDom = document.getElementById('lineChart')
 
 if (!chartDom) {return}
 export const myChart = echarts.init(chartDom, 'light')
