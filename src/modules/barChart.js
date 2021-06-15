@@ -16,12 +16,16 @@ echarts.use(
   [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
 );
 
-export default function () {
-  // 初始化加载DOM
-  const chartDom = document.getElementById('barChart');
-  if (!chartDom) {return;}
-  const myChart = echarts.init(chartDom, 'dark');
+import fitScreen from './fitScreen'
 
+// 初始化加载DOM
+const chartDom = document.getElementById('barChart');
+if (!chartDom) {return;}
+fitScreen(chartDom)
+
+const myChart = echarts.init(chartDom, 'dark');
+
+export default function () {
 // 使用配置项和数据显示图表
   myChart.setOption({
     title: {

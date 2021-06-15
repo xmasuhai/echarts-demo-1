@@ -14,11 +14,14 @@ echarts.use(
 )
 
 import chartData from '../storage/chartData'
+import fitScreen from './fitScreen.js'
 
 // 初始化加载DOM
 export const chartDom = document.getElementById('lineChart')
 
 if (!chartDom) {return}
+fitScreen(chartDom)
+
 export const myChart = echarts.init(chartDom, 'light')
 
 export default function () {
