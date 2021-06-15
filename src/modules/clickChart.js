@@ -1,4 +1,4 @@
-export default function (chartDom, myChart) {
+export default function (myChart) {
   myChart.on('click', (e) => {
     console.log("e: ", e)
     console.log("e.name: ", e.name)
