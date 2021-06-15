@@ -26,7 +26,7 @@ export default function () {
   myChart.setOption({
     title: {
       show: true,
-      text: '销售数据',
+      text: '数据',
       left: 20
     },
     legend: {
