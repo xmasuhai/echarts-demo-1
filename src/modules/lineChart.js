@@ -27,39 +27,64 @@ export const myChart = echarts.init(chartDom, 'light')
 export default function () {
 // 使用配置项和数据显示图表
   myChart.setOption({
-    title: {
-      show: true,
-      text: '数据',
-      left: 20
-    },
-    legend: {
-      data: ['金额']
-    },
-    tooltip: {
-      show: true
-    },
-    xAxis: {
-      axisLine: {
+    baseOption: {
+      title: {
+        show: true,
+        text: '数据',
+        left: 20
+      },
+      legend: {
+        data: ['金额']
+      },
+      tooltip: {
+        show: true
+      },
+      xAxis: {
+        axisLine: {
+          lineStyle: {
+            color: '#0074d9'
+          }
+        },
+        data: chartData.dateList
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [{
+        name: '金额',
+        data: chartData.valueList,
+        type: 'line',
         lineStyle: {
-          color: '#0074d9'
+          color: '#28a745'
+        },
+        itemStyle: {
+          borderWidth: 20,
+          color: '#ff4136'
         }
-      },
-      data: chartData.dateList
+      }]
     },
-    yAxis: {
-      type: 'value'
-    },
-    series: [{
-      name: '金额',
-      data: chartData.valueList,
-      type: 'line',
-      lineStyle: {
-        color: '#28a745'
-      },
-      itemStyle: {
-        borderWidth: 20,
-        color: '#ff4136'
+    media: [
+      {
+        query: {
+          maxWidth: 500
+        },
+        option: {
+          title: {
+            show: true,
+            text: '移动端数据',
+            left: 20
+          },
+          series: [{
+            lineStyle: {
+              color: '#0074d9'
+            },
+            itemStyle: {
+              borderWidth: 25,
+              color: '#ff4136'
+            }
+          }]
+        }
       }
-    }]
+    ]
   })
 }
