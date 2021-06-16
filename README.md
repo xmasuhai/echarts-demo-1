@@ -33,7 +33,7 @@
 <body>
 <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.1/echarts.min.js"></script>
 <script>
-// 查看控制台是否正确引入
+  // 查看控制台是否正确引入
   console.log(echarts)
 </script>
 </body>
@@ -102,20 +102,20 @@ console.log('hi')
 
 ```js
 import {
-    TitleComponent,
-    TooltipComponent,
-    GridComponent,
-    LegendComponent
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  LegendComponent
 } from 'echarts/components';
 import {
-    BarChart
+  BarChart
 } from 'echarts/charts';
 import {
-    CanvasRenderer
+  CanvasRenderer
 } from 'echarts/renderers';
 
 echarts.use(
-    [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
+        [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
 );
 
 ```
@@ -198,7 +198,7 @@ import {
 } from 'echarts/renderers';
 
 echarts.use(
-  [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
+        [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
 );
 
 export default function () {
@@ -258,7 +258,7 @@ export default function () {
     <div id="lineChart" style="width: 600px; height:400px;"></div>
   </section>
 </main>
-<script src="main.js"></script>
+<script src="main.ts"></script>
 </body>
 
 </html>
@@ -648,7 +648,9 @@ export default function (myChart) {
 
 #### `echart` 点击事件
 
-> 让用户可以和图表进行交互，在初始化后的 echarts 实例( `const myChart = echarts.init(chartDom, 'light')` )上使用 API `on` 即可
+> 让用户可以和图表进行交互
+>
+> 在初始化后的 echarts 实例( `const myChart = echarts.init(chartDom, 'light')` )上使用 API `on` 即可
 
 - 只有图表中允许用户操作(比如点击)的部分才能设置用户交互
 - 获取`dataIndex`和`seriesIndex`
@@ -692,17 +694,286 @@ clickChart(myChart)
 
 - `meta:viewport` 抄淘宝手机版
 - 用`JS`获取屏幕宽度设置在`div`上
-- 设定宽高比
+  - 设定宽高比
+- 使用`echarts`提供的媒体查询API
 
-##### `echarts`提供的功能
+> `main.m.taobao.com`
+
+```html
+<meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+```
+
+> iPhoneX 的宽度 `375px`  PC端设计稿是 `1920*1080`
+
+- 用代码获取屏幕宽度，来适配
+
+```js
+const width = document.documentElement.clientWidth
+```
+
+##### `echarts`提供的媒体查询功能
 
 - `baseOption` + `media`
+  - 将共有的选项放入 `baseOption: {...}`
+  - 将独有的选项放入 `media: [{query: {...}, option: {...}}, ...]`
+
+> `fitScreen.js`
+
+```js
+// 当前视口宽度
+const myScreenWidth = document.documentElement.clientWidth
+
+export default function (chartDom) {
+  if (!chartDom) {return}
+  let coefficient = 1
+  if(myScreenWidth > 500) {
+    coefficient = .45
+  }
+  chartDom.style.width = `${myScreenWidth * coefficient}px`
+  chartDom.style.height = `${myScreenWidth * coefficient * 1.2}px`
+}
+
+```
+
+> `lineChart.js`
+
+```js
+import ...
+
+echarts.use(
+  [GridComponent, LineChart, CanvasRenderer]
+)
+
+import chartData from '../storage/chartData'
+import fitScreen from './fitScreen.js'
+
+// 初始化加载DOM
+export const chartDom = document.getElementById('lineChart')
+
+if (!chartDom) {return}
+fitScreen(chartDom)
+
+export const myChart = echarts.init(chartDom, 'light')
+
+export default function () {
+// 使用配置项和数据显示图表
+  myChart.setOption({
+    baseOption: {
+      title: {
+        show: true,
+        text: '数据',
+        left: 20
+      },
+      legend: {
+        data: ['金额']
+      },
+      tooltip: {
+        show: true
+      },
+      xAxis: {
+        axisLine: {
+          lineStyle: {
+            color: '#0074d9'
+          }
+        },
+        data: chartData.dateList
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [{
+        name: '金额',
+        data: chartData.valueList,
+        type: 'line',
+        lineStyle: {
+          color: '#28a745'
+        },
+        itemStyle: {
+          borderWidth: 5,
+          color: '#ff4136'
+        }
+      }]
+    },
+    media: [
+      {
+        query: {
+          maxWidth: 500
+        },
+        option: {
+          title: {
+            show: true,
+            text: '移动端数据',
+            left: 20
+          },
+          series: [{
+            itemStyle: {
+              borderWidth: 25,
+              color: '#ff4136'
+            }
+          }]
+        }
+      }
+    ]
+  })
+}
+
+```
+
+---
+
+##### 字体
+
+> 按比例缩放字体
+
+- 图表中的fontSize和legend的大小等默认都是px单位
+  - legend中的itemWidth，itemHeight，itemGap
+  - 柱状图中的barWidth，坐标系中的axisLine的width
+  - 传入vw，rem单位是没有用
+  - 定位方式传的单位可以是百分比，大小尺寸不能
+- 不只是字体的问题 各种图的比例也是
+- 将实际窗口的大小与设计图窗口大小做比得到要给相对的比率
+- 每个单位数值和这个比率相乘即可
+
+```js
+// 当前视口宽度
+const myScreenWidth = document.documentElement.clientWidth
+
+// 换算方法
+function nowSize(originalFontSizePX, initWidth = 1920) {
+  return originalFontSizePX * (myScreenWidth / initWidth)
+}
+
+const barChartOption = {
+  backgroundColor: 'transparent',
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {type: 'shadow'}
+  },
+  legend: {
+    data: ['门禁进入', '门禁外出'],
+    align: 'left',
+    top: nowSize(18),
+    right: nowSize(20),
+    textStyle: {
+      color: '#c1c5cd',
+      fontSize: nowSize(13)
+    },
+    itemWidth: nowSize(10),
+    itemHeight: nowSize(10),
+    itemGap: nowSize(12)
+  },
+  grid: {top: '24%', left: '3%', right: '3%', bottom: '3%', containLabel: true},
+  xAxis: [{
+    type: 'category',
+    data: ['1号楼', '2号楼', '3号楼', '4号楼', '5号楼', '6号楼', '7号楼', '8号楼',],
+    axisLine: {show: true, lineStyle: {color: '#45647f', width: nowSize(1), type: 'solid'}},
+    axisTick: {show: false,},
+    axisLabel: {show: true, textStyle: {color: '#a1d8f1', fontSize: nowSize(12)}},
+  }],
+  yAxis: [{
+    type: 'value',
+    axisTick: {show: false,},
+    axisLine: {show: true, lineStyle: {color: '#45647f', width: nowSize(1), type: 'solid'},},
+    splitLine: {show: false},
+    axisLabel: {show: true, textStyle: {color: '#a1d8f1', fontSize: nowSize(12)}}
+  }],
+  series: [{
+    name: '门禁进入', type: 'bar', data: [20, 50, 80, 58, 83, 68, 57, 100],
+    barWidth: nowSize(8), // 柱子宽度
+    // barGap: 1, // 柱子之间间距
+    // itemStyle: { color: '#14e3cc' }}, { name: '门禁外出', type: 'bar', data: [50, 70, 60, 61, 75, 87, 60, 62],
+    // barWidth: nowSize(8), // barGap: 1, itemStyle: { color: '#f84f55' } }]
+  }]
+}
+```
+
+> 参考
+
+- [echarts 图表 PC/移动端自适应方案](https://www.jianshu.com/p/091c6812b0ad)
+- [echarts图表文字如何适配大屏分辨率](https://juejin.cn/post/6897857163918573582)
+- [echarts改变字体单位实现自适应](https://www.huaweicloud.com/articles/273c606c14d0371b9f0ce160d6971b83.html)
 
 ---
 
 #### Vue里使用 `echarts`
 
-##### 封装组件
+##### 自己封装组件
+
+> `vue-index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style/reset.scss">
+  <title>echarts-demo-1</title>
+</head>
+
+<body>
+<main>
+  <section id="vueChartDemo">
+  </section>
+</main>
+<script src="vue-main.js"></script>
+</body>
+
+</html>
+
+```
+
+> 安装演示用的依赖
+
+```sh
+yarn add vue@2.6.11
+yarn add --dev @types/vue
+```
+
+- vue版本依赖包（vue@2.6.11 ） （vue-template-compiler@2.6.14）不匹配
+- 把版本号改成一样`yarn add --dev vue-template-compiler@2.6.11`
+
+> 入口文件`vue-main.js` 演示组件`vue-app.vue`
+
+```js
+import Vue from 'vue'
+import VueApp from './vue-app.vue'
+
+new Vue({
+  render: h => h(VueApp)
+}).$mount(document.getElementById('vueChartDemo'))
+
+```
+
+```vue
+<template>
+  <div>
+    Hi
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'vue-app'
+};
+</script>
+
+<style lang="scss" scoped>
+
+</style>
+
+```
+
+> 启动服务运行，自动安装所需依赖
+
+```sh
+parcel src/vue-index.html
+```
 
 ##### 引入其他封装
 
@@ -712,7 +983,7 @@ clickChart(myChart)
 
 #### React里使用 `echarts`
 
-##### 封装组件
+##### 自己封装组件
 
 ##### 引入其他封装
 
@@ -738,6 +1009,7 @@ clickChart(myChart)
 > 参考
 
 - [Echarts 使用指南 PDF](chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/https://static.xiedaimala.com/xdml/file/3ac7c224-c23d-491f-84b5-4fabfbeab9b8/2020-5-17-21-21-26.pdf)
+- [ECharts 教程 RUNOOB](https://www.runoob.com/echarts/echarts-tutorial.html)
 
 
 ### 在 Vue 记账中加入 ECharts
