@@ -3,14 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "pcl": "parcel src/index.html"
+    "pcl": "parcel src/index.html",
+    "pclv": "parcel src/vue-index.html"
   },
   "dependencies": {
-    "echarts": "^5.1.2"
+    "echarts": "^5.1.2",
+    "vue": "2.6.11",
+    "vue-hot-reload-api": "^2.3.4"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "2.0.0-beta.2",
     "@types/echarts": "^4.9.8",
-    "sass": "^1.35.1"
+    "@types/vue": "^2.0.0",
+    "@vue/component-compiler-utils": "^3.2.2",
+    "sass": "^1.35.1",
+    "vue-template-compiler": "2.6.11"
   }
 }
