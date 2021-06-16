@@ -2,6 +2,35 @@
 # yarn lockfile v1
 
 
+"@parcel/plugin@2.0.0-beta.2":
+  version "2.0.0-beta.2"
+  resolved "https://registry.nlark.com/@parcel/plugin/download/@parcel/plugin-2.0.0-beta.2.tgz?cache=0&sync_timestamp=1623803873364&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40parcel%2Fplugin%2Fdownload%2F%40parcel%2Fplugin-2.0.0-beta.2.tgz#78de0725c9dfb010ccbf92fe39b1aafa960675e5"
+  integrity sha1-eN4HJcnfsBDMv5L+ObGq+pYGdeU=
+  dependencies:
+    "@parcel/types" "2.0.0-beta.2"
+
+"@parcel/source-map@2.0.0-alpha.4.21":
+  version "2.0.0-alpha.4.21"
+  resolved "https://registry.nlark.com/@parcel/source-map/download/@parcel/source-map-2.0.0-alpha.4.21.tgz#608f37fefe05ba1d8a8527ca0f3a8487560d4695"
+  integrity sha1-YI83/v4Fuh2KhSfKDzqEh1YNRpU=
+  dependencies:
+    node-addon-api "^3.0.0"
+    node-gyp-build "^4.2.3"
+
+"@parcel/transformer-sass@2.0.0-beta.2":
+  version "2.0.0-beta.2"
+  resolved "https://registry.nlark.com/@parcel/transformer-sass/download/@parcel/transformer-sass-2.0.0-beta.2.tgz?cache=0&sync_timestamp=1623803866344&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40parcel%2Ftransformer-sass%2Fdownload%2F%40parcel%2Ftransformer-sass-2.0.0-beta.2.tgz#94a0afc37a2b2fe76e2be54cc331c2756918b25b"
+  integrity sha1-lKCvw3orL+duK+VMwzHCdWkYsls=
+  dependencies:
+    "@parcel/plugin" "2.0.0-beta.2"
+    "@parcel/source-map" "2.0.0-alpha.4.21"
+    sass "^1.32.4"
+
+"@parcel/types@2.0.0-beta.2":
+  version "2.0.0-beta.2"
+  resolved "https://registry.nlark.com/@parcel/types/download/@parcel/types-2.0.0-beta.2.tgz?cache=0&sync_timestamp=1623803874469&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40parcel%2Ftypes%2Fdownload%2F%40parcel%2Ftypes-2.0.0-beta.2.tgz#39530f885a546ccc8759ba8b970440bb7aadc146"
+  integrity sha1-OVMPiFpUbMyHWbqLlwRAu3qtwUY=
+
 "@types/echarts@^4.9.8":
   version "4.9.8"
   resolved "https://registry.yarnpkg.com/@types/echarts/-/echarts-4.9.8.tgz#a69779ca4755eb29b61387af4e15ec324623f866"
@@ -100,6 +129,16 @@ is-number@^7.0.0:
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-7.0.0.tgz#7535345b896734d5f80c4d06c50955527a14f12b"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
 
+node-addon-api@^3.0.0:
+  version "3.2.1"
+  resolved "https://registry.nlark.com/node-addon-api/download/node-addon-api-3.2.1.tgz#81325e0a2117789c0128dab65e7e38f07ceba161"
+  integrity sha1-gTJeCiEXeJwBKNq2Xn448HzroWE=
+
+node-gyp-build@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.npm.taobao.org/node-gyp-build/download/node-gyp-build-4.2.3.tgz#ce6277f853835f718829efb47db20f3e4d9c4739"
+  integrity sha1-zmJ3+FODX3GIKe+0fbIPPk2cRzk=
+
 normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
@@ -117,7 +156,7 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
-sass@^1.35.1:
+sass@^1.32.4, sass@^1.35.1:
   version "1.35.1"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.35.1.tgz#90ecf774dfe68f07b6193077e3b42fb154b9e1cd"
   integrity sha512-oCisuQJstxMcacOPmxLNiLlj4cUyN2+8xJnG7VanRoh2GOLr9RqkvI4AxA4a6LHVg/rsu+PmxXeGhrdSF9jCiQ==
