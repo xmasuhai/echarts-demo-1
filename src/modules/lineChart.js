@@ -13,7 +13,7 @@ echarts.use(
   [GridComponent, LineChart, CanvasRenderer]
 )
 
-import chartData from '../storage/chartData'
+import {dateList, valueList} from '../storage/chartData'
 import fitScreen from './fitScreen.js'
 
 // 初始化加载DOM
@@ -23,68 +23,69 @@ if (!chartDom) {return}
 fitScreen(chartDom)
 
 export const myChart = echarts.init(chartDom, 'light')
-
-export default function () {
-// 使用配置项和数据显示图表
-  myChart.setOption({
-    baseOption: {
-      title: {
-        show: true,
-        text: '数据',
-        left: 20
+export const options = {
+  baseOption: {
+    title: {
+      show: true,
+      text: '数据',
+      left: 20
+    },
+    legend: {
+      data: ['金额']
+    },
+    tooltip: {
+      show: true
+    },
+    xAxis: {
+      axisLine: {
+        lineStyle: {
+          color: '#0074d9'
+        }
       },
-      legend: {
-        data: ['金额']
+      data: dateList
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [{
+      name: '金额',
+      data: valueList,
+      type: 'line',
+      lineStyle: {
+        color: '#28a745'
       },
-      tooltip: {
-        show: true
+      itemStyle: {
+        borderWidth: 20,
+        color: '#ff4136'
+      }
+    }]
+  },
+  media: [
+    {
+      query: {
+        maxWidth: 500
       },
-      xAxis: {
-        axisLine: {
+      option: {
+        title: {
+          show: true,
+          text: '移动端数据',
+          left: 20
+        },
+        series: [{
           lineStyle: {
             color: '#0074d9'
-          }
-        },
-        data: chartData.dateList
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [{
-        name: '金额',
-        data: chartData.valueList,
-        type: 'line',
-        lineStyle: {
-          color: '#28a745'
-        },
-        itemStyle: {
-          borderWidth: 20,
-          color: '#ff4136'
-        }
-      }]
-    },
-    media: [
-      {
-        query: {
-          maxWidth: 500
-        },
-        option: {
-          title: {
-            show: true,
-            text: '移动端数据',
-            left: 20
           },
-          series: [{
-            lineStyle: {
-              color: '#0074d9'
-            },
-            itemStyle: {
-              borderWidth: 25,
-              color: '#ff4136'
-            }
-          }]
-        }
+          itemStyle: {
+            borderWidth: 25,
+            color: '#ff4136'
+          }
+        }]
       }
-    ]
-  })
+    }
+  ]
+}
+
+export default function () {
+  // 使用配置项和数据显示图表
+  myChart.setOption(options)
 }
