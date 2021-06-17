@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="vueChartDemo">
     Hi
   </div>
 </template>
