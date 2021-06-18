@@ -15,8 +15,8 @@ import {
 echarts.use(
   [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
 )
-import {chartOptions as barChartOptions} from '../static/barChartOptions.js'
-import fitScreen from '../static/fitScreen.js'
+import {chartOptions as barChartOptions} from '../store/options/barChartOptions.js'
+import fitScreen from '../utils/fitScreen.js'
 
 // 初始化加载DOM
 const chartDom = document.getElementById('barChart')

@@ -1,4 +1,4 @@
-import {dateList, valueList} from '../storage/chartData'
+import {dateList, valueList} from '../chartData'
 
 export const chartOptions = {
   baseOption: {

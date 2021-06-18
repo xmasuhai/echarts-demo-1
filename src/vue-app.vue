@@ -7,7 +7,6 @@
 </template>
 
 <script>
-
 import * as echarts from 'echarts/core'
 import {
   GridComponent
@@ -22,8 +21,8 @@ import {
 echarts.use(
   [GridComponent, LineChart, CanvasRenderer]
 )
-import VueEcharts from './components/vue-echarts.vue'
-import {chartOptions as lineChartOptions} from './static/lineChartOptions.js'
+import VueEcharts from './view/vue-echarts.vue'
+import {chartOptions as lineChartOptions} from './store/options/lineChartOptions.js'
 
 export default {
   name: 'vue-app',
@@ -34,9 +33,6 @@ export default {
     return {
       option: lineChartOptions,
     }
-  },
-  mounted() {
-    console.log(this.option)
   },
   methods: {
     loadMore() {

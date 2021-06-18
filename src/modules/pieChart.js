@@ -11,7 +11,7 @@ import {
 import {
   CanvasRenderer
 } from 'echarts/renderers'
-import fitScreen from '../static/fitScreen'
+import fitScreen from '../utils/fitScreen'
 
 echarts.use(
   [TitleComponent, TooltipComponent, LegendComponent, PieChart, TimelineComponent, CanvasRenderer]
@@ -22,7 +22,7 @@ const chartDom = document.getElementById('pieChart')
 if (!chartDom) {return}
 fitScreen(chartDom)
 
-import {chartOptions as pieChartOptions} from '../static/pieChartOptions.js'
+import {chartOptions as pieChartOptions} from '../store/options/pieChartoptions.js'
 
 const myChart = echarts.init(chartDom, 'default')
 const chartOptions

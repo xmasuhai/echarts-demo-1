@@ -1,4 +1,4 @@
-import chartData, {createKey, createValue} from '../storage/chartData'
+import chartData, {createKey, createValue} from '../store/chartData'
 
 const loadMoreButton = document.getElementById('loadMore')
 

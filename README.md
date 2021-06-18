@@ -1,5 +1,6 @@
 # echarts-demo-1
 
+
 ## 统计图表
 
 ### 【数据可视化】Echarts 使用指南
@@ -9,6 +10,15 @@
 - JS里使用 `echarts`
 - Vue里使用 `echarts`
 - React里使用 `echarts`
+
+---
+
+#### echarts 图表绘制思路
+
+1. 获取一个有宽高的 `DOM` 元素
+1. 初始化echarts实例(`echarts.init`)
+1. 指定图表的配置项和数据(`option`)
+1. 使用刚指定的配置项和数据显示图表(`setOption(option`))
 
 #### 引入 `echarts`
 
@@ -33,7 +43,7 @@
 <body>
 <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.1/echarts.min.js"></script>
 <script>
-  // 查看控制台是否正确引入
+// 查看控制台是否正确引入
   console.log(echarts)
 </script>
 </body>
@@ -64,6 +74,7 @@ yarn add echarts
 yarn add --dev @types/echarts
 ```
 
+- 安装`yarn global add parcel-bundler`而 **不是`yarn global add parcel`**
 - 安装`yarn add --dev @types/echarts`是为了在`WebStorm`中输入代码会有提示
 - 遇坑，不显示属性名提示（灰色表示）
   - 保证安装包安装在项目目录下的`node_modules`，而不是安装在`~/`根目录
@@ -102,20 +113,20 @@ console.log('hi')
 
 ```js
 import {
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  LegendComponent
+    TitleComponent,
+    TooltipComponent,
+    GridComponent,
+    LegendComponent
 } from 'echarts/components';
 import {
-  BarChart
+    BarChart
 } from 'echarts/charts';
 import {
-  CanvasRenderer
+    CanvasRenderer
 } from 'echarts/renderers';
 
 echarts.use(
-        [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
+    [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
 );
 
 ```
@@ -141,6 +152,8 @@ parcel src/index.html
 - Copy 去官网炒栗子
 - Run 在自己的项目里运行
 - Modify 修改代码，理解作用（半黑箱）
+
+---
 
 #### `echarts` 第一个例子
 
@@ -172,6 +185,8 @@ parcel src/index.html
 
 ```
 
+- 在绘图前需要为 ECharts 准备一个具备高宽的 DOM 容器
+
 > `main.js`
 
 ```js
@@ -198,7 +213,7 @@ import {
 } from 'echarts/renderers';
 
 echarts.use(
-        [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
+  [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
 );
 
 export default function () {
@@ -258,7 +273,7 @@ export default function () {
     <div id="lineChart" style="width: 600px; height:400px;"></div>
   </section>
 </main>
-<script src="main.ts"></script>
+<script src="main.js"></script>
 </body>
 
 </html>
@@ -901,7 +916,7 @@ const barChartOption = {
 
 ##### 自己封装组件
 
-> `vue-index.html`
+> 准备一个`vue-index.html`
 
 ```html
 <!DOCTYPE html>
@@ -928,6 +943,8 @@ const barChartOption = {
 
 ```
 
+---
+
 > 安装演示用的依赖
 
 ```sh
@@ -935,10 +952,13 @@ yarn add vue@2.6.11
 yarn add --dev @types/vue
 ```
 
-- vue版本依赖包（vue@2.6.11 ） （vue-template-compiler@2.6.14）不匹配
-- 把版本号改成一样`yarn add --dev vue-template-compiler@2.6.11`
+> 遇坑
 
-> 入口文件`vue-main.js` 演示组件`vue-app.vue`
+- vue版本依赖包（`vue@2.6.11` ） （`vue-template-compiler@2.6.14`）不匹配
+- 把版本号改成一样`yarn add --dev vue-template-compiler@2.6.11`
+- 在 vue 工程中，安装依赖时，需要 `vue` 和 `vue-template-compiler` 版本必须保持一致，否则会报错
+
+> 入口文件`vue-main.js`
 
 ```js
 import Vue from 'vue'
@@ -950,7 +970,9 @@ new Vue({
 
 ```
 
-```vue
+> 入口组件`vue-app.vue`
+
+```html
 <template>
   <div>
     Hi
@@ -963,10 +985,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-
-</style>
-
 ```
 
 > 启动服务运行，自动安装所需依赖
@@ -975,9 +993,114 @@ export default {
 parcel src/vue-index.html
 ```
 
+> 遇坑
+
+- 注意之前安装的是`yarn global add parcel-bundler`，而 **不是`yarn global add parcel`**
+- 查看版本是否一致：`parcel --version`或`parcel -V`，返回的是否是`1.12.5`，非`beta`版
+- [官方地址：https://www.parceljs.cn/](https://www.parceljs.cn/)
+- 否则会报错
+  - `console: [@vue/compiler-sfc] compileTemplate now requires the `id` option.`.`
+  - `xxx Uncaught TypeError: _vue.withScopeId is not a function`
+
+##### `Vue`中局部使用 `echarts`
+
+> 演示组件`./components/vue-charts.vue`
+
+```html
+<template>
+  <div ref="container">
+    vue-echarts
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'vue-echarts',
+  mounted() {
+    console.log(this.$refs.container);
+  }
+}
+</script>
+
+```
+
+- `Vue`中，通过另一种方式获取组件的 `DOM`，代替使用`document.getElementById('...')`
+  - 因为`Vue`是单页面应用，如果将以上的组件使用两次，一个页面内 id 是不允许相同
+  - 否则会出现第一个组件正常显示，第二个组件无法显示
+- 使用`Vue`的`$refs`对象，只要将组件注册属性`ref="xxx"`
+- 在`mounted`时调用`this.$refs.xxx`，避免 `echarts` 的容器还没有生成就进行初始化
+
+> 引入到`vue-app.vue`
+
+```html
+<template>
+  <div id="vueChartDemo">
+    <h2>在 Vue 中使用 echarts</h2>
+    <vue-echarts></vue-echarts>
+  </div>
+</template>
+
+<script>
+import VueEcharts from './components/vue-echarts.vue'
+export default {
+  name: 'vue-app',
+  components: {
+    VueEcharts
+  }
+}
+</script>
+
+```
+
+> `vue-charts.vue`设置容器尺寸，引入`echarts`
+
+```html
+
+```
+
+- 将初始化后的`chart`挂在`this`上：`this.chart = myChart.setOption({...})`
+  - 可访问`this.chart`
+- 外部数据`props`传入`echars`所需的`option`
+
+##### Vue引入外部 js 变量和方法
+
+- Vue中引入静态JS文件需要在有特殊含义的路径下
+- `store` 数据 - `components` 组件 - `utils` 工具函数 - `vendor`或者`libs`第三方库
+- 脚本代码不放在`assets`或者`static`目录下
+  - [assets 和 static 的区别](https://segmentfault.com/q/1010000009842688)- [webpack 模板的文档 - Handing Static Assets](http://vuejs-templates.github.io/webpack/static.html)
+  - `assests`放置的是组件的资源，`static`放置的是非组件的资源
+  - `assests`-> bundle(编译到一起) 内容会被 webpack 打包到一起
+  - `static`下的文件资源作为src路径传入组件中 -> resources(远程URL请求) 浏览器直接去请求文件
+
+##### `Vue`中全局使用 `echarts`
+
+> 在项目文件的入口js文 `main.js` 中引入 `echarts`，并使用该插件，这样就可以对其进行全局使用
+
+```js
+import echarts from 'echarts'
+
+Vue.use(echarts)
+Vue.prototype.$echarts = echarts
+```
+
+```js
+// 基于准备好的dom，初始化ECharts实例
+const myChart = this.$echarts.init(document.getElementById('main'));
+```
+
+
+##### 封装一个动态渲染数据的Echarts折线图组件
+
+
+
+
 ##### 引入其他封装
 
 - [vue-echarts](https://github.com/ecomfe/vue-echarts)
+
+> 参考
+
+- [Vue-ECharts v6 发布](https://zhuanlan.zhihu.com/p/355180255)
 
 ---
 
@@ -988,6 +1111,16 @@ parcel src/vue-index.html
 ##### 引入其他封装
 
 - [echarts-for-react](https://github.com/hustcc/echarts-for-react)
+
+> 参考
+
+- [Vue封装引入外部脚本的组件](https://cloud.tencent.com/developer/article/1185523?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
+- [Vue.js引入 **外部CSS样式** 和 **外部JS文件** 的方法](https://cloud.tencent.com/developer/article/1394002?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
+- [Vue 中如何正确引入 **第三方模块** ](https://cloud.tencent.com/developer/article/1425087?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
+- [Vue引入第三方js包及调用方法](http://www.uxys.com/html/Vue/20200301/26862.html)
+- [Vue 动态加载 **远程js** 完美实践](https://cloud.tencent.com/developer/article/1356013?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
+- [Vue引入 **远程JS文件**](https://www.bbsmax.com/A/ZOJPDaQOJv/)
+- [Vue 2.x  中的片段 vue-fragment 额外的节点包装器技术 Vue v3 中引入片段功能](https://cloud.tencent.com/developer/article/1573469?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
 
 ---
 
