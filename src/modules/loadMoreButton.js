@@ -5,7 +5,7 @@ const loadMoreButton = document.getElementById('loadMore')
 let isLoading = false
 export default function (myChart) {
   loadMoreButton.addEventListener('click', () => {
-    if(isLoading) {return}
+    if (isLoading) {return}
     const key = createKey()
     const value = createValue()
     chartData.dateList = [...chartData.dateList, key]
@@ -26,5 +26,5 @@ export default function (myChart) {
       isLoading = false
     }, 1500)
 
-  })
+  }, {passive: true})
 }

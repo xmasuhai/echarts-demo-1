@@ -7,10 +7,23 @@
 </template>
 
 <script>
+
+import * as echarts from 'echarts/core'
+import {
+  GridComponent
+} from 'echarts/components'
+import {
+  LineChart
+} from 'echarts/charts'
+import {
+  CanvasRenderer
+} from 'echarts/renderers'
+
+echarts.use(
+  [GridComponent, LineChart, CanvasRenderer]
+)
 import VueEcharts from './components/vue-echarts.vue'
-import {options} from './modules/lineChart.js'
-const vueChartOption = options
-console.log("vueChartOption: ", vueChartOption)
+import {chartOptions as lineChartOptions} from './static/lineChartOptions.js'
 
 export default {
   name: 'vue-app',
@@ -19,7 +32,7 @@ export default {
   },
   data() {
     return {
-      option: {}
+      option: lineChartOptions,
     }
   },
   mounted() {

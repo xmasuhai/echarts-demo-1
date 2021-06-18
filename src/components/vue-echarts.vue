@@ -7,6 +7,15 @@
 <script>
 import * as echarts from 'echarts/core'
 import {
+  TitleComponent
+} from 'echarts/components'
+import {
+  LegendComponent
+} from 'echarts/components'
+import {
+  TooltipComponent
+} from 'echarts/components'
+import {
   GridComponent
 } from 'echarts/components'
 import {
@@ -17,10 +26,10 @@ import {
 } from 'echarts/renderers'
 
 echarts.use(
-  [GridComponent, LineChart, CanvasRenderer]
+  [TitleComponent, LegendComponent, TooltipComponent, GridComponent, LineChart, CanvasRenderer]
 )
 
-import fitScreen from '../modules/fitScreen.js'
+import fitScreen from '../static/fitScreen.js'
 
 export default {
   name: 'vue-echarts',
