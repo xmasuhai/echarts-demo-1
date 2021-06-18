@@ -32,7 +32,7 @@ export default {
   },
   watch: {
     option() {
-      this.chart.setOPtion(this.option)
+      this.chart.setOption(this.option)
     }
   }
 }

@@ -17,13 +17,13 @@ import {dateList, valueList} from '../storage/chartData'
 import fitScreen from './fitScreen.js'
 
 // 初始化加载DOM
-export const chartDom = document.getElementById('lineChart')
+const chartDom = document.getElementById('lineChart')
 
 if (!chartDom) {return}
 fitScreen(chartDom)
 
-export const myChart = echarts.init(chartDom, 'light')
-export const options = {
+const myChart = echarts.init(chartDom, 'light')
+const chartOptions = {
   baseOption: {
     title: {
       show: true,
@@ -85,7 +85,8 @@ export const options = {
   ]
 }
 
-export default function () {
-  // 使用配置项和数据显示图表
-  myChart.setOption(options)
+export {
+  chartDom,
+  myChart,
+  chartOptions
 }

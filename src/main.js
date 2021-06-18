@@ -1,23 +1,14 @@
-import barChart from './modules/barChart.js'
-
-barChart()
-
-import lineChart, {myChart} from './modules/lineChart.js'
-
-lineChart()
-
+import chartSetOption from './modules/chartSetOption'
+import {myChart as myBarChart, chartOptions as barChartOptions} from './modules/barChart.js'
+import {myChart as myLineChart, chartOptions as lineChartOptions} from './modules/lineChart.js'
+import {myChart as myPieChart, chartOptions as pieChartOptions} from './modules/pieChart.js'
 import loadMoreButton from './modules/loadMoreButton'
-
-loadMoreButton(myChart)
-
 import clickChart from './modules/clickChart.js'
-
-clickChart(myChart)
-
-import pieChart from './modules/pieChart.js'
-
-pieChart()
-
 import uiTriggerChart from './modules/uiTriggerEvent'
 
+chartSetOption(myBarChart, barChartOptions)
+chartSetOption(myLineChart, lineChartOptions)
+loadMoreButton(myLineChart)
+clickChart(myLineChart)
+chartSetOption(myPieChart, pieChartOptions)
 uiTriggerChart()

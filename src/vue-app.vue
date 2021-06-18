@@ -9,6 +9,8 @@
 <script>
 import VueEcharts from './components/vue-echarts.vue'
 import {options} from './modules/lineChart.js'
+const vueChartOption = options
+console.log("vueChartOption: ", vueChartOption)
 
 export default {
   name: 'vue-app',
@@ -17,14 +19,15 @@ export default {
   },
   data() {
     return {
-      option: {
-        options
-      }
+      option: {}
     }
   },
-  methods:{
+  mounted() {
+    console.log(this.option)
+  },
+  methods: {
     loadMore() {
-      console.log(options)
+      console.log(this.option)
     }
   }
 }

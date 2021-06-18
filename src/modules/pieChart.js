@@ -18,18 +18,12 @@ echarts.use(
 )
 
 // 初始化加载DOM
-export const chartDom = document.getElementById('pieChart')
-
+const chartDom = document.getElementById('pieChart')
 if (!chartDom) {return}
 fitScreen(chartDom)
 
-export const myChart = echarts.init(chartDom, 'default')
-
-export default function () {
-  myChart.setOption(option)
-}
-
-export const option = {
+const myChart = echarts.init(chartDom, 'default')
+const chartOptions = {
   baseOption: {
     title: {
       text: '饼图程序调用高亮示例',
@@ -85,4 +79,10 @@ export const option = {
       }
     }
   ]
+}
+
+export {
+  chartDom,
+  myChart,
+  chartOptions
 }

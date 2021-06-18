@@ -16,7 +16,7 @@ echarts.use(
   [TitleComponent, TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]
 )
 
-import fitScreen from './fitScreen'
+import fitScreen from './fitScreen.js'
 
 // 初始化加载DOM
 const chartDom = document.getElementById('barChart')
@@ -25,42 +25,46 @@ fitScreen(chartDom)
 
 const myChart = echarts.init(chartDom, 'dark')
 
-export default function () {
-// 使用配置项和数据显示图表
-  myChart.setOption({
-    baseOption: {
-      title: {
-        text: 'ECharts 柱状图示例'
-      },
-      tooltip: {},
-      legend: {
-        data: ['bug数']
-      },
-      xAxis: {
-        data: ['1月', '2月', '3月', '4月', '5月', '6月'],
-      },
-      yAxis: {},
-      series: [{
-        name: 'bug数',
-        type: 'bar',
-        data: [5, 20, 36, 10, 10, 20],
-      }]
+const chartOptions = {
+  baseOption: {
+    title: {
+      text: 'ECharts 柱状图示例'
     },
-    media: [
-      {
-        query: {
-          maxWidth: 500
+    legend: {
+      data: ['bug数']
+    },
+    tooltip: {},
+    xAxis: {
+      data: ['1月', '2月', '3月', '4月', '5月', '6月'],
+    },
+    yAxis: {
+    },
+    series: [{
+      name: 'bug数',
+      type: 'bar',
+      data: [5, 20, 36, 10, 10, 20],
+    }]
+  },
+  media: [
+    {
+      query: {
+        maxWidth: 500
+      },
+      option: {
+        title: {
+          text: 'ECharts 柱状图示例 移动端'
         },
-        option: {
-          title: {
-            text: 'ECharts 柱状图示例 移动端'
-          },
-          legend: {
-            data: ['bug数'],
-            right: 40
-          },
-        }
+        legend: {
+          data: ['bug数'],
+          right: 40
+        },
       }
-    ]
-  })
+    }
+  ]
+}
+
+export {
+  chartDom,
+  myChart,
+  chartOptions
 }

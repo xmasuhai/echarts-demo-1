@@ -1,11 +1,11 @@
-import {myChart, option} from './pieChart'
+import {myChart, chartOptions} from './pieChart'
 
 const app = {}
 app.currentIndex = -1
 
 export default function () {
   setInterval(() => {
-    const dataLength = option.baseOption.series[0].data.length
+    const dataLength = chartOptions.baseOption.series[0].data.length
 
     // 取消之前高亮的图形 dispatchAction({ type: 'downplay' })
     myChart.dispatchAction({

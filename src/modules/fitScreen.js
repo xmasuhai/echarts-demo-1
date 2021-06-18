@@ -7,6 +7,6 @@ export default function (chartDom) {
   if(myScreenWidth > 500) {
     coefficient = .45
   }
-  chartDom.style.width = `${(myScreenWidth - 20) * coefficient}px`
-  chartDom.style.height = `${(myScreenWidth - 20) * coefficient * 1.2}px`
+  chartDom.style.width = `${(myScreenWidth - 10) * coefficient}px`
+  chartDom.style.height = `${(myScreenWidth - 10) * coefficient * 1.2}px`
 }
