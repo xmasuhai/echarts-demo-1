@@ -3,9 +3,10 @@
     <h2>在 Vue 中使用 echarts</h2>
     <vue-echarts :option="option"
                  :moreData="n"
+                 :isLoading="isLoading"
                  @giveMoreData="renewOptions($event)">
     </vue-echarts>
-    <button @click="loadMore" ref="loadMore">加载更多</button>
+    <button @click="loadMore">加载更多</button>
   </div>
 </template>
 
@@ -24,9 +25,10 @@ import {
 echarts.use(
   [GridComponent, LineChart, CanvasRenderer]
 )
+
 import VueEcharts from './view/vue-echarts.vue'
 import {chartOptions as lineChartOptions} from './store/options/lineChartOptions.js'
-import {loadMoreData} from './utils/loadMoreButton.js'
+import {resetOption, renewData} from './utils/loadMoreButton.js'
 
 export default {
   name: 'vue-app',
@@ -36,6 +38,7 @@ export default {
   data() {
     return {
       n: 0,
+      isLoading: false,
       option: lineChartOptions,
     }
   },
@@ -44,12 +47,16 @@ export default {
       this.n++
     },
     renewOptions(container) {
-      loadMoreData(container)
+      if (this.isLoading) {return}
+      renewData()
+      container.showLoading()
+      this.isLoading = true
+      setTimeout(() => {
+        resetOption(container)
+        container.hideLoading()
+        this.isLoading = false
+      }, 1500)
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

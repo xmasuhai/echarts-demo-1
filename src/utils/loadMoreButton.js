@@ -1,33 +1,42 @@
-import {dateList, valueList, createKey, createValue} from '../store/chartData'
+import {dateList, valueList, createKey, createValue} from '../store/chartData.js'
 
 const loadMoreButton = document.getElementById('loadMore')
 let isLoading = false
 let newDateList = [...dateList]
 let newValueList = [...valueList]
 
-const loadMoreData = function (myChart) {
-  if (isLoading) {return}
+const renewData = function() {
   const key = createKey()
   const value = createValue()
   newDateList = [...newDateList, key]
   newValueList = [...newValueList, value]
+}
 
-  myChart.showLoading()
-  isLoading = true
+const resetOption = function(myChart) {
+  myChart.setOption({
+    xAxis: {
+      data: newDateList
+    },
+    series: [{
+      data: newValueList
+    }]
+  })
+}
 
+const mockLoadData = function(myChart) {
   setTimeout(() => {
-    myChart.setOption({
-      xAxis: {
-        data: newDateList
-      },
-      series: [{
-        data: newValueList
-      }]
-    })
+    resetOption(myChart)
     myChart.hideLoading()
     isLoading = false
   }, 1500)
+}
 
+const loadMoreData = function (myChart) {
+  if (isLoading) {return}
+  renewData()
+  myChart.showLoading()
+  isLoading = true
+  mockLoadData(myChart)
 }
 
 export default function (buttonElement, myChart) {
@@ -40,5 +49,7 @@ export {
   loadMoreButton,
   newDateList,
   newValueList,
-  loadMoreData
+  loadMoreData,
+  renewData,
+  resetOption
 }

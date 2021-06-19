@@ -16,13 +16,14 @@ import {
   CanvasRenderer
 } from 'echarts/renderers'
 import fitScreen from '../utils/fitScreen.js'
+
 echarts.use(
   [TitleComponent, LegendComponent, TooltipComponent, TimelineComponent, GridComponent, LineChart, CanvasRenderer]
 )
 
 export default {
   name: 'vue-echarts',
-  props: ['option', 'moreData'],
+  props: ['option', 'moreData', 'isLoading'],
   mounted() {
     fitScreen(this.$refs.container)
     this.chart = echarts.init(this.$refs.container, 'light')
@@ -34,11 +35,10 @@ export default {
     },
     moreData() {
       this.$emit('giveMoreData', this.chart)
+    },
+    isLoading() {
+      this.isLoading ? this.chart.showLoading() : this.chart.hideLoading()
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

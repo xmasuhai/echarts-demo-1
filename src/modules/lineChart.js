@@ -8,14 +8,12 @@ import {
 import {
   CanvasRenderer
 } from 'echarts/renderers'
+import fitScreen from '../utils/fitScreen.js'
+import {chartOptions as lineChartOptions} from '../store/options/lineChartOptions.js'
 
 echarts.use(
   [GridComponent, LineChart, CanvasRenderer]
 )
-
-import fitScreen from '../utils/fitScreen.js'
-import {chartOptions as lineChartOptions} from '../store/options/lineChartOptions.js'
-
 // 初始化加载DOM
 const chartDom = document.getElementById('lineChart')
 if (!chartDom) {return}
