@@ -1,19 +1,21 @@
-export let n = 0
-export let m = 0
+let n = 0
+let m = 0
 
-export function createKey() {
+function createKey() {
   n += 1
   return `2021-6-${n}`
 }
 
-export function createValue() {
+function createValue() {
   m += 1
   return m
 }
 
-export let dateList = [createKey(), createKey(), createKey(), createKey(), createKey()]
+let dateList = [createKey(), createKey(), createKey(), createKey(), createKey()]
+let valueList = [createValue(), createValue(), createValue(), createValue(), createValue()]
 
-export let valueList = [createValue(), createValue(), createValue(), createValue(), createValue()]
-export default {
+export {
+  m, n,
+  createKey, createValue,
   dateList, valueList
 }

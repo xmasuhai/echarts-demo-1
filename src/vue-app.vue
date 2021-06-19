@@ -1,8 +1,11 @@
 <template>
-  <div id="vueChartDemo">
+  <div>
     <h2>在 Vue 中使用 echarts</h2>
-    <vue-echarts :option="option"></vue-echarts>
-    <button @click="loadMore"> load More</button>
+    <vue-echarts :option="option"
+                 :moreData="n"
+                 @giveMoreData="renewOptions($event)">
+    </vue-echarts>
+    <button @click="loadMore" ref="loadMore">加载更多</button>
   </div>
 </template>
 
@@ -23,6 +26,7 @@ echarts.use(
 )
 import VueEcharts from './view/vue-echarts.vue'
 import {chartOptions as lineChartOptions} from './store/options/lineChartOptions.js'
+import {loadMoreData} from './utils/loadMoreButton.js'
 
 export default {
   name: 'vue-app',
@@ -31,12 +35,16 @@ export default {
   },
   data() {
     return {
+      n: 0,
       option: lineChartOptions,
     }
   },
   methods: {
     loadMore() {
-      console.log(this.option)
+      this.n++
+    },
+    renewOptions(container) {
+      loadMoreData(container)
     }
   }
 }
