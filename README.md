@@ -1,6 +1,5 @@
 # echarts-demo-1
 
-
 ## 统计图表
 
 ### 【数据可视化】Echarts 使用指南
@@ -734,7 +733,7 @@ const width = document.documentElement.clientWidth
   - 将共有的选项放入 `baseOption: {...}`
   - 将独有的选项放入 `media: [{query: {...}, option: {...}}, ...]`
 
-> `fitScreen.js`
+> 封装自动获取容器尺寸的方法 `./src/utils/fitScreen.js`
 
 ```js
 // 当前视口宽度
@@ -996,15 +995,29 @@ parcel src/vue-index.html
 > 遇坑
 
 - 注意之前安装的是`yarn global add parcel-bundler`，而 **不是`yarn global add parcel`**
-- 查看版本是否一致：`parcel --version`或`parcel -V`，返回的是否是`1.12.5`，非`beta`版
-- [官方地址：https://www.parceljs.cn/](https://www.parceljs.cn/)
+- 查看版本是否一致：`parcel --version`或`parcel -V`，返回的是否是`1.12.5`，非`@2.0.0beta`版
+- [官方地址：https://www.parces.cn/](https://www.parceljs.cn/)
 - 否则会报错
   - `console: [@vue/compiler-sfc] compileTemplate now requires the `id` option.`.`
   - `xxx Uncaught TypeError: _vue.withScopeId is not a function`
 
+##### Vue引入外部 js 变量和方法
+
+- Vue中引入静态JS文件需要在有特殊含义的路径下，否则无效
+- `store` 数据
+- `view` 展示页面
+- `components` 组件
+- `utils` 工具函数
+- `vendor`或者`libs`第三方库
+- 脚本代码不放在`assets`或者`static`目录下
+  - [assets 和 static 的区别](https://segmentfault.com/q/1010000009842688)- [webpack 模板的文档 - Handing Static Assets](http://vuejs-templates.github.io/webpack/static.html)
+  - `assests`放置的是组件的资源，`static`放置的是非组件的资源
+  - `assests`-> bundle(编译到一起) 内容会被 webpack 打包到一起
+  - `static`下的文件资源作为src路径传入组件中 -> resources(远程URL请求) 浏览器直接去请求文件
+
 ##### `Vue`中局部使用 `echarts`
 
-> 演示组件`./components/vue-charts.vue`
+> 演示组件`./view/vue-charts.vue`
 
 ```html
 <template>
@@ -1052,25 +1065,246 @@ export default {
 
 ```
 
-> `vue-charts.vue`设置容器尺寸，引入`echarts`
+> 拆开并封装组件`./src/modules/lineChart.js`和`./src/store/options/lineChartOptions.js`
+>
+> 重构`./src/store/chartData.js`和`./src/utils/loadMoreButton.js`
+
+```js
+// lineChartOptions.js
+import {dateList, valueList} from '../chartData.js'
+
+export const chartOptions = {
+  baseOption: {...},
+  media: [...]
+}
+
+```
+
+```js
+// lineChart.js
+import ...
+echarts.use(
+  [GridComponent, LineChart, CanvasRenderer]
+)
+
+import fitScreen from '../utils/fitScreen.js'
+import {chartOptions as lineChartOptions} from '../store/options/lineChartOptions.js'
+
+// 初始化加载DOM
+const chartDom = document.getElementById('lineChart')
+if (!chartDom) {return}
+fitScreen(chartDom)
+
+const myChart = echarts.init(chartDom, 'light')
+const chartOptions
+  = lineChartOptions
+
+export {
+  chartDom,
+  myChart,
+  chartOptions
+}
+
+```
+
+```js
+// chartData.js
+let n = 0
+let m = 0
+
+function createKey() {
+  n += 1
+  return `2021-6-${n}`
+}
+
+function createValue() {
+  m += 1
+  return m
+}
+
+let dateList = [createKey(), createKey(), createKey(), createKey(), createKey()]
+let valueList = [createValue(), createValue(), createValue(), createValue(), createValue()]
+
+export {
+  m, n,
+  createKey, createValue,
+  dateList, valueList
+}
+
+```
+
+```js
+// loadMoreButton.js
+import {dateList, valueList, createKey, createValue} from '../store/chartData.js'
+
+const loadMoreButton = document.getElementById('loadMore')
+let isLoading = false
+let newDateList = [...dateList]
+let newValueList = [...valueList]
+
+const renewData = function() {
+  const key = createKey()
+  const value = createValue()
+  newDateList = [...newDateList, key]
+  newValueList = [...newValueList, value]
+}
+
+const resetOption = function(myChart) {
+  myChart.setOption({
+    xAxis: {
+      data: newDateList
+    },
+    series: [{
+      data: newValueList
+    }]
+  })
+}
+
+const mockLoadData = function(myChart) {
+  setTimeout(() => {
+    resetOption(myChart)
+    myChart.hideLoading()
+    isLoading = false
+  }, 1500)
+}
+
+const loadMoreData = function (myChart) {
+  if (isLoading) {return}
+  renewData()
+  myChart.showLoading()
+  isLoading = true
+  mockLoadData(myChart)
+}
+
+export default function (buttonElement, myChart) {
+  buttonElement.addEventListener('click', () => {
+    loadMoreData(myChart)
+  })
+}
+
+export {
+  loadMoreButton,
+  newDateList,
+  newValueList,
+  loadMoreData,
+  renewData,
+  resetOption
+}
+
+```
+
+> `vue-charts.vue`
 
 ```html
+<template>
+  <div ref="container">
+    vue-echarts
+  </div>
+</template>
+
+<script>
+// 按需引入 echarts 模块
+import * as echarts from 'echarts/core'
+import {
+  TitleComponent, TooltipComponent, LegendComponent, GridComponent, TimelineComponent
+} from 'echarts/components'
+import {
+  LineChart
+} from 'echarts/charts'
+import {
+  CanvasRenderer
+} from 'echarts/renderers'
+import fitScreen from '../utils/fitScreen.js'
+echarts.use(
+  [TitleComponent, LegendComponent, TooltipComponent, TimelineComponent, GridComponent, LineChart, CanvasRenderer]
+)
+
+export default {
+  name: 'vue-echarts',
+  props: ['option', 'moreData', 'isLoading'],
+  mounted() {
+    fitScreen(this.$refs.container)
+    this.chart = echarts.init(this.$refs.container, 'light')
+    this.chart.setOption(this.option)
+  },
+  watch: {
+    option() {
+      this.chart.setOption(this.option)
+    },
+    moreData() {
+      this.$emit('giveMoreData', this.chart)
+    },
+    isLoading() {
+      this.isLoading ? this.chart.showLoading() : this.chart.hideLoading()
+    }
+  }
+}
+</script>
 
 ```
 
 - 将初始化后的`chart`挂在`this`上：`this.chart = myChart.setOption({...})`
   - 可访问`this.chart`
+  - 当外部数据`moreData`改变，触发自定义事件`giveMoreData`给父组件`vue-app.vue`，并传参`this.chart`
 - 外部数据`props`传入`echars`所需的`option`
 
-##### Vue引入外部 js 变量和方法
+> `vue-app.vue`
 
-- Vue中引入静态JS文件需要在有特殊含义的路径下
-- `store` 数据 - `components` 组件 - `utils` 工具函数 - `vendor`或者`libs`第三方库
-- 脚本代码不放在`assets`或者`static`目录下
-  - [assets 和 static 的区别](https://segmentfault.com/q/1010000009842688)- [webpack 模板的文档 - Handing Static Assets](http://vuejs-templates.github.io/webpack/static.html)
-  - `assests`放置的是组件的资源，`static`放置的是非组件的资源
-  - `assests`-> bundle(编译到一起) 内容会被 webpack 打包到一起
-  - `static`下的文件资源作为src路径传入组件中 -> resources(远程URL请求) 浏览器直接去请求文件
+```html
+<template>
+  <div>
+    <h2>在 Vue 中使用 echarts</h2>
+    <vue-echarts :option="option"
+                 :moreData="n"
+                 @giveMoreData="renewOptions($event)">
+    </vue-echarts>
+    <button @click="loadMore">加载更多</button>
+  </div>
+</template>
+
+<script>
+import ...
+
+echarts.use(
+  [GridComponent, LineChart, CanvasRenderer]
+)
+
+import VueEcharts from './view/vue-echarts.vue'
+import {chartOptions as lineChartOptions} from './store/options/lineChartOptions.js'
+import {resetOption, renewData} from './utils/loadMoreButton.js'
+
+export default {
+  name: 'vue-app',
+  components: {
+    VueEcharts
+  },
+  data() {
+    return {
+      n: 0,
+      isLoading: false,
+      option: lineChartOptions,
+    }
+  },
+  methods: {
+    loadMore() {
+      this.n++
+    },
+    renewOptions(container) {
+      if (this.isLoading) {return}
+      renewData()
+      container.showLoading()
+      this.isLoading = true
+      setTimeout(() => {
+        resetOption(container)
+        container.hideLoading()
+        this.isLoading = false
+      }, 1500)
+    }
+  }
+}
+</script>
+
+```
 
 ##### `Vue`中全局使用 `echarts`
 
@@ -1088,7 +1322,6 @@ Vue.prototype.$echarts = echarts
 const myChart = this.$echarts.init(document.getElementById('main'));
 ```
 
-
 ##### 封装一个动态渲染数据的Echarts折线图组件
 
 
@@ -1101,6 +1334,17 @@ const myChart = this.$echarts.init(document.getElementById('main'));
 > 参考
 
 - [Vue-ECharts v6 发布](https://zhuanlan.zhihu.com/p/355180255)
+- [Vue封装引入外部脚本的组件](https://cloud.tencent.com/developer/article/1185523?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
+- [Vue.js引入 **外部CSS样式** 和 **外部JS文件** 的方法](https://cloud.tencent.com/developer/article/1394002?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
+- [Vue 中如何正确引入 **第三方模块** ](https://cloud.tencent.com/developer/article/1425087?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
+- [Vue引入第三方js包及调用方法](http://www.uxys.com/html/Vue/20200301/26862.html)
+- [Vue 动态加载 **远程js** 完美实践](https://cloud.tencent.com/developer/article/1356013?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
+- [Vue引入 **远程JS文件**](https://www.bbsmax.com/A/ZOJPDaQOJv/)
+- [Vue 2.x  中的片段 vue-fragment 额外的节点包装器技术 Vue v3 中引入片段功能](https://cloud.tencent.com/developer/article/1573469?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
+- [vue页面引入外部js文件遇到的问题](https://www.bbsmax.com/A/WpdK4EaXzV/)
+- [vue组件内部引入远程js文件](https://www.bbsmax.com/A/x9J2e47jz6/)
+- [vue组件内部引入外部js文件的方法](https://www.jb51.net/article/178777.htm)
+- [Parcel+vue 入门实战](https://segmentfault.com/a/1190000012427886)
 
 ---
 
@@ -1113,14 +1357,6 @@ const myChart = this.$echarts.init(document.getElementById('main'));
 - [echarts-for-react](https://github.com/hustcc/echarts-for-react)
 
 > 参考
-
-- [Vue封装引入外部脚本的组件](https://cloud.tencent.com/developer/article/1185523?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
-- [Vue.js引入 **外部CSS样式** 和 **外部JS文件** 的方法](https://cloud.tencent.com/developer/article/1394002?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
-- [Vue 中如何正确引入 **第三方模块** ](https://cloud.tencent.com/developer/article/1425087?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
-- [Vue引入第三方js包及调用方法](http://www.uxys.com/html/Vue/20200301/26862.html)
-- [Vue 动态加载 **远程js** 完美实践](https://cloud.tencent.com/developer/article/1356013?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
-- [Vue引入 **远程JS文件**](https://www.bbsmax.com/A/ZOJPDaQOJv/)
-- [Vue 2.x  中的片段 vue-fragment 额外的节点包装器技术 Vue v3 中引入片段功能](https://cloud.tencent.com/developer/article/1573469?from=information.detail.vue%E4%B8%AD%E5%A6%82%E4%BD%95%E5%BC%95%E5%85%A5js%E6%96%87%E4%BB%B6)
 
 ---
 
@@ -1154,7 +1390,6 @@ const myChart = this.$echarts.init(document.getElementById('main'));
 - 设计图：Figma
 - 初始代码：https://github.com/FrankFang/morney-test-9
 - 最终代码：https://github.com/FrankFang/morney-test-vue-echarts
-
 
 ---
 ---
