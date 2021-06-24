@@ -53,7 +53,7 @@ export const chartOptions = {
             color: '#0074d9'
           },
           itemStyle: {
-            borderWidth: 25,
+            borderWidth: 30,
             color: '#ff4136'
           }
         }]

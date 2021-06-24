@@ -1,5 +1,7 @@
 # echarts-demo-1
 
+[toc]
+
 ## 统计图表
 
 ### 【数据可视化】Echarts 使用指南
