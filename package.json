@@ -7,17 +7,17 @@
     "pclv": "parcel src/vue-index.html"
   },
   "dependencies": {
-    "echarts": "^5.1.2",
-    "vue": "2.6.11",
+    "echarts": "6.0.0",
+    "vue": "2.6.14",
     "vue-hot-reload-api": "^2.3.4"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "2.0.0-beta.2",
-    "@types/echarts": "^4.9.8",
-    "@types/vue": "^2.0.0",
+    "@parcel/transformer-sass": "2.0.0",
+    "@types/echarts": "5.0.0",
+    "@types/vue": "2.0.0",
     "@vue/component-compiler-utils": "^3.2.2",
     "sass": "^1.35.1",
     "typescript": "^4.3.4",
-    "vue-template-compiler": "2.6.11"
+    "vue-template-compiler": "2.6.14"
   }
 }
