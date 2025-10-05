@@ -1,11 +1,20 @@
+<!--
+ * @Description: vue组件使用echarts
+ * @Author: xmasuhai
+ * @Date: 2025-10-04 15:18:21
+ * @LastEditors: xmasuhai
+ * @LastEditTime: 2025-10-05 12:14:34
+ * @FilePath: src/vue-app.vue
+ * Copyright (c) 2025 by xmasuhai, All Rights Reserved.
+-->
 <template>
   <div>
     <h2>在 Vue 中使用 echarts</h2>
-    <vue-echarts :option="option"
-                 :moreData="n"
-                 :isLoading="isLoading"
-                 @giveMoreData="renewOptions($event)">
-    </vue-echarts>
+    <VueEcharts
+      :option="option"
+      :moreData="n"
+      :isLoading="isLoading"
+      @giveMoreData="renewOptions($event)"/>
     <button @click="loadMore">加载更多</button>
   </div>
 </template>
@@ -21,19 +30,18 @@ import {
 import {
   CanvasRenderer
 } from 'echarts/renderers'
+import VueEcharts from './view/vue-echarts.vue'
+import {chartOptions as lineChartOptions} from './store/options/lineChartOptions.js'
+import {resetOption, renewData} from './utils/loadMoreButton.js'
 
 echarts.use(
   [GridComponent, LineChart, CanvasRenderer]
 )
 
-import VueEcharts from './view/vue-echarts.vue'
-import {chartOptions as lineChartOptions} from './store/options/lineChartOptions.js'
-import {resetOption, renewData} from './utils/loadMoreButton.js'
-
 export default {
   name: 'vue-app',
   components: {
-    VueEcharts
+    VueEcharts,
   },
   data() {
     return {

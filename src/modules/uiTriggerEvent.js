@@ -3,6 +3,15 @@ import {myChart, chartOptions} from './pieChart'
 const app = {}
 app.currentIndex = -1
 
+/*
+ * @Description: 图表分派事件
+ * @Author: xmasuhai
+ * @Date: 2025-10-04 15:18:21
+ * @LastEditors: xmasuhai
+ * @LastEditTime: 2025-10-05 22:14:34
+ * @FilePath: src/modules/uiTriggerEvent.js
+ * Copyright (c) 2025 by xmasuhai, All Rights Reserved.
+ */
 export default function () {
   setInterval(() => {
     const dataLength = chartOptions.baseOption.series[0].data.length
